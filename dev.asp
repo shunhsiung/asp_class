@@ -4,7 +4,7 @@ class mydev
 	private count_i
 
 	private sub Class_Initialize
-		ip_list = "^192.168.1.1|192.168.3.1$"
+		ip_list = "^192.168.1.1|192.168.1.2$"
 		isdebug = mynumeric(request("debug"))	
 		script_name = Request.ServerVariables("SCRIPT_NAME")
 		count_i = 0
@@ -17,7 +17,13 @@ class mydev
 	end function
 
 	function is_dev_ip
-		is_dev_ip = chkregexp ( Request.ServerVariables ("REMOTE_ADDR") , ip_list )			
+		set reg = new regexp
+		with reg
+			.pattern = ip_list
+			.IgnoreCase = true
+		end with
+
+		is_dev_ip = reg.test( Request.ServerVariables ("REMOTE_ADDR"))
 	end function
 
 	function debug
