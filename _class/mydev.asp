@@ -3,14 +3,19 @@ class mydev
 	private ip_list, isdebug , script_name
 
 	private sub Class_Initialize
-'		ip_list = "^210.59.162.67|220.134.194.189|210.242.163.247|192.168.103.33|192.168.103.38$"
 		ip_list = "^210.59.162.67|220.134.194.189$"
 		isdebug = mynumeric(request("debug"))	
 		script_name = Request.ServerVariables("SCRIPT_NAME")
 	end sub
 
 	function is_dev_ip
-		is_dev_ip = chkregexp ( Request.ServerVariables ("REMOTE_ADDR") , ip_list )			
+		set reg = new regexp
+		with reg
+			.pattern = ip_list
+			.IgnoreCase = true
+		end with
+
+		is_dev_ip = reg.test( Request.ServerVariables ("REMOTE_ADDR"))
 	end function
 
 	function debug_js
